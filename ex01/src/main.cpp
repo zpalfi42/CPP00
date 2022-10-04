@@ -6,12 +6,17 @@
 /*   By: zpalfi <zpalfi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 12:47:35 by zpalfi            #+#    #+#             */
-/*   Updated: 2022/10/04 15:28:26 by zpalfi           ###   ########.fr       */
+/*   Updated: 2022/10/04 17:09:43 by zpalfi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cstring>
+#include <string>
 #include <iostream>
+
+using std::cin;
+using std::cout;
+using std::endl;
+using std::string;
 
 class PhoneBook
 {
@@ -25,11 +30,11 @@ public:
 class Contact
 {
 private:
-    std::string first_name;
-    std::string last_name;
-    std::string nickname;
-    std::string phone;
-    std::string secret;
+    string first_name;
+    string last_name;
+    string nickname;
+    string phone;
+    string secret;
 public:
     Contact(/* args */);
     ~Contact();
@@ -39,11 +44,11 @@ public:
 
 Contact::Contact()
 {
-	this->first_name = "";
-	this->last_name = "";
-	this->nickname = "";
-	this->phone = "";
-	this->secret = "";
+	// this->first_name = "";
+	// this->last_name = "";
+	// this->nickname = "";
+	// this->phone = "";
+	// this->secret = "";
 }
 
 Contact::~Contact()
@@ -55,27 +60,29 @@ void    Contact::add(void)
     
     while (42)
     {
-        std::cout << "First name:";
-        std::cin >> new_contact.first_name;
-        if (new_contact.first_name.empty())
+        cout << "First name:";
+        while (4242)
         {
-            std::cout << "Field cannot be empty! Try again\n";
-            break ;
+                getline(cin, new_contact.first_name);
+            if (new_contact.first_name.empty())
+            {
+                cout << "Empty field not valid! Please, try again.\n" << "First name:";
+            }
+            else
+                break;
         }
-        else
-            break ;
     }
 }
 
 int main()
 {
-    std::string command;
+    string command;
     Contact contact;
     // PhoneBook pb;
     while (42)
     {
-        std::cout << "Enter a command:";
-        std::cin >> command;
+        cout << "Enter a command:";
+        cin >> command;
         if (command == "EXIT")
             break;
         else if (command == "ADD")
@@ -85,6 +92,6 @@ int main()
         else if (command == "\0")
             break ;
         else
-            std::cout << "Not a valid command! Try again\n";
+            cout << "Not a valid command! Try again\n";
     }
 }
