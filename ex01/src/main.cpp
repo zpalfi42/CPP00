@@ -6,7 +6,7 @@
 /*   By: zpalfi <zpalfi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 12:47:35 by zpalfi            #+#    #+#             */
-/*   Updated: 2022/10/04 17:09:43 by zpalfi           ###   ########.fr       */
+/*   Updated: 2022/10/06 13:12:35 by zpalfi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
-
-class PhoneBook
-{
-private:
-    /* data */
-public:
-    // PhoneBook(/* args */);
-    // ~PhoneBook();
-};
 
 class Contact
 {
@@ -39,7 +30,22 @@ public:
     Contact(/* args */);
     ~Contact();
     
-    void    add(void);
+    Contact    add(Contact contact);
+    void    print_info(Contact contact);
+    string    add_info(string msg);
+    int     isnull(Contact contact);
+};
+
+class PhoneBook
+{
+private:
+    //Contact contacts[9];
+public:
+    Contact contacts[9];
+    int     check_pb(PhoneBook pb);
+    PhoneBook del_one(PhoneBook pb);
+    // PhoneBook(/* args */);
+    // ~PhoneBook();
 };
 
 Contact::Contact()
@@ -54,44 +60,105 @@ Contact::Contact()
 Contact::~Contact()
 {}
 
-void    Contact::add(void)
+string  Contact::add_info(string msg)
 {
-    Contact new_contact;
+    string dest;
     
+    cout << msg;
     while (42)
     {
-        cout << "First name:";
-        while (4242)
-        {
-                getline(cin, new_contact.first_name);
-            if (new_contact.first_name.empty())
-            {
-                cout << "Empty field not valid! Please, try again.\n" << "First name:";
-            }
-            else
-                break;
-        }
+        getline(cin, dest);
+        if (dest.empty())
+            cout << "Empty field not valid! Please, try again.\n" << msg;
+        else
+            break ;
     }
+    return (dest);
+}
+
+Contact    Contact::add(Contact new_contact)
+{
+    new_contact.first_name = add_info("First name:");
+    new_contact.last_name = add_info("Last name:");
+    new_contact.nickname = add_info("Nickname:");
+    new_contact.phone = add_info("Phone numer:");
+    new_contact.secret = add_info("Darkest secret:");
+    cout << new_contact.first_name << '\n';
+    return (new_contact);
+}
+
+void Contact::print_info(Contact contact)
+{
+    cout << contact.first_name << '\n';
+}
+
+int     Contact::isnull(Contact contact)
+{
+    if (contact.first_name.empty())
+        return (1);
+    return (0);
+}
+
+int PhoneBook::check_pb(PhoneBook pb)
+{
+    int i;
+
+    i = 0;
+    while (i < 8)
+    {
+        if (pb.contacts[i].isnull(pb.contacts[i]))
+            break ;
+        i++;
+    }
+    return (i);
+}
+
+PhoneBook PhoneBook::del_one(PhoneBook pb)
+{
+    int i;
+
+    i = 0;
+    while (i < 7)
+    {
+        pb.contacts[i] = pb.contacts[i + 1];
+        i++;
+    }
+    return (pb);
 }
 
 int main()
 {
     string command;
     Contact contact;
-    // PhoneBook pb;
+    PhoneBook pb;
+    int     i;
+
+    i = 0;
     while (42)
     {
         cout << "Enter a command:";
-        cin >> command;
+        getline(cin, command);
         if (command == "EXIT")
             break;
         else if (command == "ADD")
-            contact.add();
+        {
+            i = pb.check_pb(pb);
+            cout << i;
+            if (i > 7)
+            {
+                pb = pb.del_one(pb);
+                i = 7;
+            }
+            pb.contacts[i] = contact.add(contact);
+        }
         else if (command == "SEARCH")
             break ;
-        else if (command == "\0")
-            break ;
+        else if (command.empty())
+            continue ;
         else
             cout << "Not a valid command! Try again\n";
+        contact.print_info(pb.contacts[0]);
+        contact.print_info(pb.contacts[3]);
+        contact.print_info(pb.contacts[7]);
     }
 }
