@@ -6,12 +6,13 @@
 /*   By: zpalfi <zpalfi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 12:47:35 by zpalfi            #+#    #+#             */
-/*   Updated: 2022/10/06 13:12:35 by zpalfi           ###   ########.fr       */
+/*   Updated: 2022/10/06 16:14:53 by zpalfi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 using std::cin;
 using std::cout;
@@ -31,9 +32,10 @@ public:
     ~Contact();
     
     Contact    add(Contact contact);
-    void    print_info(Contact contact);
+    void    print_info(Contact contact, int i);
     string    add_info(string msg);
     int     isnull(Contact contact);
+    void    display_complete(Contact contact);
 };
 
 class PhoneBook
@@ -44,6 +46,7 @@ public:
     Contact contacts[9];
     int     check_pb(PhoneBook pb);
     PhoneBook del_one(PhoneBook pb);
+    void        display(PhoneBook pb);
     // PhoneBook(/* args */);
     // ~PhoneBook();
 };
@@ -83,13 +86,7 @@ Contact    Contact::add(Contact new_contact)
     new_contact.nickname = add_info("Nickname:");
     new_contact.phone = add_info("Phone numer:");
     new_contact.secret = add_info("Darkest secret:");
-    cout << new_contact.first_name << '\n';
     return (new_contact);
-}
-
-void Contact::print_info(Contact contact)
-{
-    cout << contact.first_name << '\n';
 }
 
 int     Contact::isnull(Contact contact)
@@ -97,6 +94,35 @@ int     Contact::isnull(Contact contact)
     if (contact.first_name.empty())
         return (1);
     return (0);
+}
+
+void    Contact::print_info(Contact contact, int i)
+{
+    if (i == 1)
+    {
+        if (contact.first_name.size() > 10)
+            cout << string(contact.first_name.begin(), contact.first_name.begin() + 9) << '.';
+        else
+            cout << std::setw(10) << contact.first_name;
+    }
+    if (i == 2)
+    {
+        if (contact.last_name.size() > 10)
+            cout << string(contact.last_name.begin(), contact.last_name.begin() + 9) << '.';
+        else
+            cout << std::setw(10) << contact.last_name;
+    }
+    if (i == 3)
+    {
+        if (contact.nickname.size() > 10)
+            cout << string(contact.nickname.begin(), contact.nickname.begin() + 9) << '.';
+        else
+            cout << std::setw(10) << contact.nickname;
+    }
+    if (i == 4)
+        cout << contact.phone;
+    if (i == 5)
+        cout << contact.secret;
 }
 
 int PhoneBook::check_pb(PhoneBook pb)
@@ -126,6 +152,72 @@ PhoneBook PhoneBook::del_one(PhoneBook pb)
     return (pb);
 }
 
+int isnum(string s, int i)
+{
+    if (s.size() != 1)
+        return (0);
+    if (48 <= s.front() && s.front() <= 48 + i)
+        return (1);
+    return (0);
+}
+
+void    Contact::display_complete(Contact contact)
+{
+    cout << "First name: " << contact.first_name << endl;
+    cout << "Last name: " << contact.last_name << endl;
+    cout << "Nickname: " << contact.nickname << endl;
+    cout << "Phone number: " << contact.phone << endl;
+    cout << "Darkest secret: " << contact.secret << endl;
+}
+
+void        PhoneBook::display(PhoneBook pb)
+{
+    int i;
+    int max;
+    string index;
+
+    i = 0;
+    if (pb.contacts[0].isnull(pb.contacts[0]))
+    {
+        cout << "Your Phonebook is empty!!\n";
+        return ;
+    }
+    cout << "|-------------------------------------------|\n";
+    cout << "|     Index|" << "First name|" << " Last name|" << "  Nickname|\n";
+    cout << "|-------------------------------------------|\n";
+    while (i < 8)
+    {
+        if (pb.contacts[i].isnull(pb.contacts[i]))
+            break ;
+        cout << "|" << std::setw(10) << i << "|";
+        contacts[i].print_info(contacts[i], 1);
+        cout << "|";
+        contacts[i].print_info(contacts[i], 2);
+        cout << "|";
+        contacts[i].print_info(contacts[i], 3);
+        cout << "|\n";
+        cout << "|-------------------------------------------|\n";
+        i++;
+    }
+    max = i - 1;
+    while (42)
+    {
+        cout << "Please select the index for more info:";
+        getline(cin, index);
+        if (index.empty())
+            continue ;
+        if (isnum(index, max))
+            i = std::stoi(index);
+        else
+        {
+            cout << "Please enter a valid number >:(\n";
+            continue;
+        }
+        pb.contacts[i].display_complete(pb.contacts[i]);
+        break ;
+    }
+}
+
 int main()
 {
     string command;
@@ -143,22 +235,32 @@ int main()
         else if (command == "ADD")
         {
             i = pb.check_pb(pb);
-            cout << i;
             if (i > 7)
             {
-                pb = pb.del_one(pb);
-                i = 7;
+                i = -42;
+                while (i == -42)
+                {
+                    cout << "Attention! Maximum number of contacts reached, If you continue the oldest contact will be deleated in order to add the new one. (Y/N):";
+                    getline(cin, command);
+                    if (command == "Y")
+                    {
+                        pb = pb.del_one(pb);
+                        i = 7;
+                    }
+                    else if (command == "N")
+                        i = -1;
+                    else
+                        cout << "Not valid entrance!, try again.\n";
+                }
             }
-            pb.contacts[i] = contact.add(contact);
+            if (i >= 0)
+                pb.contacts[i] = contact.add(contact);
         }
         else if (command == "SEARCH")
-            break ;
+            pb.display(pb);
         else if (command.empty())
             continue ;
         else
             cout << "Not a valid command! Try again\n";
-        contact.print_info(pb.contacts[0]);
-        contact.print_info(pb.contacts[3]);
-        contact.print_info(pb.contacts[7]);
     }
 }
