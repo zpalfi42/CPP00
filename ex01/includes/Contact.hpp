@@ -26,14 +26,15 @@ private:
     std::string phone;
     std::string secret;
 public:
-    Contact(/* args */);
+    Contact();
     ~Contact();
     
-    Contact    add(Contact contact);
-    void    print_info(Contact contact, int i);
-    std::string    add_info(std::string msg);
-    int     isnull(Contact contact);
-    void    display_complete(Contact contact);
+    Contact(std::string first_name, std::string last_name, std::string nickname, std::string phone, std::string secret);
+    
+    Contact     add(Contact contact);
+    int         isnull(Contact contact);
+    void        display_complete(Contact contact);
+    void        print_info(Contact contact, int i);
 };
 
 #endif

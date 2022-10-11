@@ -12,6 +12,15 @@
 
 #include "Contact.hpp"
 
+Contact::Contact(std::string first_name, std::string last_name, std::string nickname, std::string phone, std::string secret)
+{
+    this->first_name = first_name;
+    this->last_name = last_name;
+    this->nickname = nickname;
+    this->phone = phone;
+    this->secret = secret;
+}
+
 Contact::Contact(void)
 {
     return ;
@@ -20,35 +29,6 @@ Contact::Contact(void)
 Contact::~Contact(void)
 {
     return ;
-}
-
-std::string  Contact::add_info(std::string msg)
-{
-    std::string dest;
-    
-    std::cout << msg;
-    while (42)
-    {
-        std::getline(std::cin, dest);
-        dest.erase(0, dest.find_first_not_of(" \t\v\f\r"));
-        while (isspace(dest.back()))
-            dest.erase(dest.find_last_not_of(" \t\v\r\f") + 1, dest.back());
-        if (dest.empty())
-            std::cout << "Empty field not valid! Please, try again." << std::endl << msg;
-        else
-            break ;
-    }
-    return (dest);
-}
-
-Contact    Contact::add(Contact new_contact)
-{
-    new_contact.first_name = add_info("First name:");
-    new_contact.last_name = add_info("Last name:");
-    new_contact.nickname = add_info("Nickname:");
-    new_contact.phone = add_info("Phone numer:");
-    new_contact.secret = add_info("Darkest secret:");
-    return (new_contact);
 }
 
 int     Contact::isnull(Contact contact)

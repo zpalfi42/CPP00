@@ -24,8 +24,8 @@ int main()
         std::cout << "Enter a command:";
         std::getline(std::cin, command);
         command.erase(0, command.find_first_not_of(" \t\v\f\r"));
-        while (isspace(command.back()))
-            command.erase(command.find_last_not_of(" \t\v\r\f") + 1, command.back());
+        while (isspace(command[command.length() - 1]))
+            command.erase(command.find_last_not_of(" \t\v\r\f") + 1, command[command.length() - 1]);
         if (command == "EXIT")
             break;
         else if (command == "ADD")
@@ -39,8 +39,8 @@ int main()
                     std::cout << "Attention! Maximum number of contacts reached, If you continue the oldest contact will be deleated in order to add the new one. (Y/N):";
                     std::getline(std::cin, command);
                     command.erase(0, command.find_first_not_of(" \t\v\f\r"));
-                    while (isspace(command.back()))
-                        command.erase(command.find_last_not_of(" \t\v\r\f") + 1, command.back());
+                    while (isspace(command[command.length() - 1]))
+                        command.erase(command.find_last_not_of(" \t\v\r\f") + 1, command[command.length() - 1]);
                     if (command == "Y")
                     {
                         pb = pb.del_one(pb);
